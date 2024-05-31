@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Don't Click Me :(</title>
+    <title>Time Will Tell</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery -->
@@ -19,6 +19,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            flex-direction: column;
         }
         .nixie-tube {
             font-family: 'Courier New', Courier, monospace;
@@ -32,13 +33,19 @@
             color: #ff6600;
             text-shadow: 0 0 10px #ff6600;
             margin-bottom: 20px;
+
+ font-family: Arial, Helvetica, sans-serif;
         }
+
+
+        
     </style>
 </head>
 <body>
     <div class="text-center">
         <h1>Time Will Tell</h1>
         <div id="clock"></div>
+        <div id="countdown" style="margin-top: 20px;"></div>
     </div>
 
     <script>
@@ -61,8 +68,39 @@
                 });
             }
 
-            setInterval(updateClock, 50); // Update every 50 milliseconds to ensure smooth updates
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const countDownDate = new Date('Jan 1, 2025 00:00:00').getTime();
+                const distance = countDownDate - now;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                const formattedCountdown = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+                const countdownElement = $('#countdown');
+                countdownElement.empty();
+                formattedCountdown.split(' ').forEach(part => {
+                    part.split('').forEach(char => {
+                        countdownElement.append(`<span class="nixie-tube">${char}</span>`);
+                    });
+                    countdownElement.append(`<span class="nixie-tube"> </span>`);
+                });
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.empty();
+                    countdownElement.append(`<span class="nixie-tube">HAPPY NEW YEAR!</span>`);
+                }
+            }
+
+            setInterval(updateClock, 50); // Update clock every 50 milliseconds to ensure smooth updates
             updateClock(); // Initial call
+
+            const countdownInterval = setInterval(updateCountdown, 1000); // Update countdown every second
+            updateCountdown(); // Initial call
         });
     </script>
 </body>
