@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Don't Click me :(</title>
+    <title>Time Will Tell</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery -->
@@ -66,7 +66,7 @@
 </head>
 <body>
     <div class="text-center">
-        <h1>Time Will Tell</h1>
+        <h1 id="typewriter"></h1>
         <div id="clock"></div>
         <div id="countdown" style="margin-top: 20px;"></div>
         <div class="gif-container">
@@ -76,6 +76,27 @@
 
     <script>
         $(document).ready(function() {
+            const messages = ["Be Careful", "Time Will Tell"];
+            let messageIndex = 0;
+            let charIndex = 0;
+
+            function typeWriter() {
+                if (charIndex < messages[messageIndex].length) {
+                    $('#typewriter').append(messages[messageIndex].charAt(charIndex));
+                    charIndex++;
+                    setTimeout(typeWriter, 100);
+                } else {
+                    setTimeout(() => {
+                        $('#typewriter').empty();
+                        charIndex = 0;
+                        messageIndex = (messageIndex + 1) % messages.length;
+                        setTimeout(typeWriter, 500);
+                    }, 3000);
+                }
+            }
+
+            typeWriter();
+
             function updateClock() {
                 const now = new Date();
                 const year = now.getFullYear();
